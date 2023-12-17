@@ -130,6 +130,13 @@ git clone https://github.com/LazyVim/starter ~/.config/nvim
 ```bash
 rm -rf ~/.config/nvim/.git
 ```
+### Python 3 provider (Optional)
+
+Reference: [Neovim GitHub](https://github.com/neovim/neovim/issues/17172)
+
+```bash
+pip3 install pynvim
+```
 
 ### Start Neovim
 
