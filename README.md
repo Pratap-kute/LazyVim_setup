@@ -1,18 +1,32 @@
-# LazyVim setup
+# LazyVim Ubuntu Setup
 
-This repository contains my LazyVim configuration and the installer I use to
-set it up on Ubuntu or Pop!_OS. The configuration lives in `nvim_config/` and
-includes the LazyVim extras and personal plugin settings used by this setup.
+Automated LazyVim and Neovim setup for Ubuntu and Pop!_OS.
+
+This project installs the tools LazyVim needs and copies a ready-to-use
+Neovim configuration into place. It is intended for developers who want a
+working editor setup without rebuilding the same environment by hand.
+
+Licensed under the [MIT License](LICENSE).
+
+The repository contains the installer, the complete configuration, and an
+experimental Docker setup:
+
+- `install_lazyvim.sh` installs the system dependencies and configuration.
+- `nvim_config/` contains the LazyVim setup and personal plugin settings.
+- `lazyvim_in_docker/` contains a Docker-based experiment for isolated use.
 
 ## Install
 
 Clone the repository, enter it, and run the installer:
 
 ```bash
-git clone <repository-url>
-cd LazyVim_setup
+git clone https://github.com/Pratap-kute/lazyvim-ubuntu-setup.git
+cd lazyvim-ubuntu-setup
 ./install_lazyvim.sh
 ```
+
+The script is designed for Ubuntu and Pop!_OS systems using `apt`. It supports
+x86-64 and ARM64 Linux machines.
 
 The installer will:
 
@@ -79,3 +93,14 @@ plugin bootstrap still needs network access to GitHub.
 
 For the official installation requirements, see the
 [LazyVim documentation](https://www.lazyvim.org/installation).
+
+## Troubleshooting
+
+If installation stops while installing system packages, run the script again
+after fixing the reported `apt` or `sudo` issue. Existing Neovim directories
+are backed up before the new configuration is copied, so the previous setup is
+available under the timestamped `.bak.*` path.
+
+If plugins do not install, check that GitHub is reachable and run `nvim` again.
+Inside Neovim, use `:Lazy` to inspect plugin errors and `:LazyHealth` for the
+dependency report. Codeium requires a separate `:Codeium Auth` login.
