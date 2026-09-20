@@ -50,12 +50,15 @@ Neovim release for x86-64 and ARM64 systems.
 ```bash
 ./install_lazyvim.sh --dry-run
 ./install_lazyvim.sh --skip-system-deps
+./install_lazyvim.sh --skip-bootstrap
 ./install_lazyvim.sh --non-interactive
 ./install_lazyvim.sh --help
 ```
 
 `--dry-run` prints the actions without changing the system. Use
 `--skip-system-deps` when the required tools are already installed. The
+`--skip-bootstrap` option copies the configuration without synchronizing
+plugins, which is useful on offline machines or in CI. The
 non-interactive mode is useful for automation, but it still requires working
 sudo credentials unless the script is run as root.
 

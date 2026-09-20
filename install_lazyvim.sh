@@ -6,6 +6,7 @@ readonly CONFIG_SOURCE="${SCRIPT_DIR}/nvim_config"
 readonly FONT_VERSION="v3.4.0"
 DRY_RUN=0
 SKIP_SYSTEM_DEPS=0
+SKIP_BOOTSTRAP=0
 NON_INTERACTIVE=0
 
 usage() {
@@ -13,6 +14,7 @@ usage() {
 Usage: install_lazyvim.sh [options]
   --dry-run             Show actions without changing the system or HOME
   --skip-system-deps   Skip apt, Neovim, LazyGit, and font installation
+  --skip-bootstrap      Install the configuration without syncing plugins
   --non-interactive    Never prompt for sudo
   -h, --help           Show this help
 EOF
@@ -31,6 +33,7 @@ else "$@"; fi; }
 for arg in "$@"; do
   case "$arg" in
   --dry-run) DRY_RUN=1 ;; --skip-system-deps) SKIP_SYSTEM_DEPS=1 ;;
+  --skip-bootstrap) SKIP_BOOTSTRAP=1 ;;
   --non-interactive) NON_INTERACTIVE=1 ;; -h | --help)
     usage
     exit 0
@@ -139,7 +142,7 @@ main() {
     install_font
   }
   install_config
-  ((DRY_RUN)) || bootstrap
+  ((DRY_RUN || SKIP_BOOTSTRAP)) || bootstrap
   log "installation complete; run :LazyHealth inside Neovim for the full report"
 }
 main "$@"
