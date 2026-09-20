@@ -3,7 +3,6 @@ set -Eeuo pipefail
 
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 readonly CONFIG_SOURCE="${SCRIPT_DIR}/nvim_config"
-readonly LAZYGIT_VERSION="0.52.1"
 readonly FONT_VERSION="v3.4.0"
 DRY_RUN=0
 SKIP_SYSTEM_DEPS=0
@@ -72,10 +71,13 @@ install_neovim() {
 }
 
 install_lazygit() {
-  local arch archive tmp url
+  local arch archive tmp url version
   case "$(uname -m)" in x86_64) arch=x86_64 ;; aarch64 | arm64) arch=arm64 ;; *) die "unsupported architecture for LazyGit" ;; esac
-  archive="lazygit_${LAZYGIT_VERSION}_Linux_${arch}.tar.gz"
-  url="https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/${archive}"
+  version="$(curl -fsSL --retry 3 https://api.github.com/repos/jesseduffield/lazygit/releases/latest \
+    | sed -n 's/.*"tag_name": "v\([^"]*\)".*/\1/p' | head -n 1)"
+  [[ -n "$version" ]] || die "could not determine the current LazyGit release"
+  archive="lazygit_${version}_Linux_${arch}.tar.gz"
+  url="https://github.com/jesseduffield/lazygit/releases/download/v${version}/${archive}"
   tmp="$(mktemp -d)"
   trap 'rm -rf -- "$tmp"' RETURN
   run curl -fL --retry 3 -o "$tmp/$archive" "$url"
