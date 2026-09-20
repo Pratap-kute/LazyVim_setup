@@ -47,4 +47,7 @@ jobs:
         run: sudo timeout 1200 ./install_lazyvim.sh --non-interactive --skip-bootstrap
 
       - name: Verify installed Neovim
-        run: nvim --headless '+checkhealth' '+qa'
+        run: |
+          nvim --version
+          test -f "$HOME/.config/nvim/init.lua"
+          test -f "$HOME/.config/nvim/lua/config/lazy.lua"
