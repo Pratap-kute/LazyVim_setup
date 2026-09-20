@@ -2,7 +2,7 @@
 
 Automated LazyVim and Neovim setup for Ubuntu and Pop!_OS.
 
-[![Installer validation](https://github.com/Pratap-kute/lazyvim-ubuntu-setup/actions/workflows/installer.yml/badge.svg)](https://github.com/Pratap-kute/lazyvim-ubuntu-setup/actions/workflows/installer.yml)
+[![CI](https://github.com/Pratap-kute/lazyvim-ubuntu-setup/actions/workflows/installer.yml/badge.svg)](https://github.com/Pratap-kute/lazyvim-ubuntu-setup/actions/workflows/installer.yml)
 
 This project installs the tools LazyVim needs and copies a ready-to-use
 Neovim configuration into place. It is intended for developers who want a
@@ -97,7 +97,7 @@ configuration copying, timestamped backups, and headless startup. A real
 plugin bootstrap still needs network access to GitHub.
 
 These checks run automatically on Ubuntu 22.04 and 24.04 through the
-[installer validation workflow](https://github.com/Pratap-kute/lazyvim-ubuntu-setup/actions/workflows/installer.yml).
+[CI workflow](https://github.com/Pratap-kute/lazyvim-ubuntu-setup/actions/workflows/installer.yml).
 
 For the official installation requirements, see the
 [LazyVim documentation](https://www.lazyvim.org/installation).
