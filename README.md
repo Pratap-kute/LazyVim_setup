@@ -1,147 +1,81 @@
-# LazyVim Setup Documentation for Ubuntu 22.04 or Pop!_OS 22.04
+# LazyVim setup
 
-## Table of Contents
-1. [Install Neovim](#1-install-neovim)
-    - [Download Neovim App Image](#download-neovim-app-image)
-    - [Add Permission](#add-permission)
-    - [Check Neovim Binary](#check-neovim-binary)
-    - [Move Neovim App Image](#move-neovim-app-image)
+This repository contains my LazyVim configuration and the installer I use to
+set it up on Ubuntu or Pop!_OS. The configuration lives in `nvim_config/` and
+includes the LazyVim extras and personal plugin settings used by this setup.
 
-2. [Install LazyVim Dependencies](#2-install-lazyvim-dependencies)
-    - [Git](#git)
-    - [Nerd Font](#nerd-font)
-    - [LazyGit](#lazygit)
-    - [C Compiler for nvim-treesitter](#c-compiler-for-nvim-treesitter)
-    - [Ripgrep for Telescope.nvim](#ripgrep-for-telescopenvim)
-    - [Fd for Telescope.nvim](#fd-for-telescopenvim)
-    - [Copy to Clipboard for Neovim](#copy-to-clipboard-for-neovim)
+## Install
 
-3. [Install LazyVim](#3-install-lazyvim)
-    - [Backup Neovim Files](#backup-neovim-files)
-    - [Clone the Starter](#clone-the-starter)
-    - [Remove .git Folder](#remove-git-folder)
-    - [Start Neovim](#start-neovim)
-
-## 1. Install Neovim
-
-Reference: [The Correct Way to Install Neovim](https://medium.com/thelinux/the-correct-way-to-install-the-neovim-42f3076f9b88)
-
-### Download Neovim App Image
+Clone the repository, enter it, and run the installer:
 
 ```bash
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+git clone <repository-url>
+cd LazyVim_setup
+./install_lazyvim.sh
 ```
 
-### Add Permission
+The installer will:
+
+- install the current stable Neovim release and the tools LazyVim needs;
+- install Tree-sitter CLI, a C/C++ toolchain, Go, Node.js, Python, ripgrep,
+  fd, LazyGit, clipboard support, and a Nerd Font;
+- back up existing Neovim configuration, data, state, and cache directories;
+- copy this repository's `nvim_config/` into `~/.config/nvim`; and
+- bootstrap the plugins and run a headless health check.
+
+It does not clone the default LazyVim starter over the custom configuration.
+
+LazyVim currently requires Neovim 0.11.2 or newer, Git 2.19 or newer, a C
+compiler, and the Tree-sitter CLI. The installer uses the architecture-specific
+Neovim release for x86-64 and ARM64 systems.
+
+## Installer options
 
 ```bash
-chmod u+x nvim.appimage
+./install_lazyvim.sh --dry-run
+./install_lazyvim.sh --skip-system-deps
+./install_lazyvim.sh --non-interactive
+./install_lazyvim.sh --help
 ```
 
-### Check Neovim Binary
+`--dry-run` prints the actions without changing the system. Use
+`--skip-system-deps` when the required tools are already installed. The
+non-interactive mode is useful for automation, but it still requires working
+sudo credentials unless the script is run as root.
 
-```bash
-./nvim.appimage
-```
+Existing Neovim directories are moved to timestamped paths such as
+`~/.config/nvim.bak.20260920-105514`, so the previous setup can be restored if
+needed. The installer also respects `XDG_CONFIG_HOME`, `XDG_DATA_HOME`,
+`XDG_STATE_HOME`, and `XDG_CACHE_HOME`.
 
-### Move Neovim App Image
+## After installation
 
-```bash
-sudo mv nvim.appimage /usr/local/bin/nvim
-```
-
-## 2. Install LazyVim Dependencies
-
-### Git
-
-```bash
-sudo apt install git
-```
-
-### Nerd Font
-
-Reference: [Install Nerd Fonts on Ubuntu](https://linuxspin.com/install-nerd-fonts-on-ubuntu/)
-
-Download your preferred Nerd Font from [Nerd Fonts download page](https://www.nerdfonts.com/font-downloads). Replace "0xProto.zip" with the downloaded file name.
-
-```bash
-cd Downloads/
-unzip 0xProto.zip -d ~/.fonts
-fc-cache -fv
-```
-If `~/.fonts` does not exist, create it using `mkdir ~/.fonts`.
-
-### LazyGit
-
-```bash
-LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
-curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
-tar xf lazygit.tar.gz lazygit
-sudo install lazygit /usr/local/bin
-```
-
-### C Compiler for nvim-treesitter
-
-```bash
-sudo apt install build-essential
-```
-
-### Ripgrep for Telescope.nvim
-
-Reference: [Ripgrep GitHub](https://github.com/BurntSushi/ripgrep)
-
-```bash
-sudo apt-get install ripgrep
-```
-
-### Fd for Telescope.nvim
-
-Reference: [Fd GitHub](https://github.com/sharkdp/fd)
-
-```bash
-sudo apt install fd-find
-```
-
-### Copy to Clipboard for Neovim
-
-```bash
-sudo apt install xsel
-```
-
-## 3. Install LazyVim
-
-### Backup Neovim Files
-
-```bash
-mv ~/.config/nvim{,.bak}
-mv ~/.local/share/nvim{,.bak}
-mv ~/.local/state/nvim{,.bak}
-mv ~/.cache/nvim{,.bak}
-```
-
-### Clone the Starter
-
-```bash
-git clone https://github.com/LazyVim/starter ~/.config/nvim
-```
-
-### Remove .git Folder
-
-```bash
-rm -rf ~/.config/nvim/.git
-```
-### Python 3 provider (Optional)
-
-Reference: [Neovim GitHub](https://github.com/neovim/neovim/issues/17172)
-
-```bash
-pip3 install pynvim
-```
-
-### Start Neovim
+Start Neovim with:
 
 ```bash
 nvim
 ```
 
-For more details, refer to the [LazyVim installation documentation](https://www.lazyvim.org/installation).
+Then run `:LazyHealth` to check the complete setup. Codeium authentication,
+terminal font selection, and attaching to an external Delve server are manual
+steps because they depend on the local environment.
+
+## Configuration layout
+
+The files in `nvim_config/lua/config/` contain the general Neovim settings.
+Files in `nvim_config/lua/plugins/` add or override plugins. The
+`nvim_config/lazyvim.json` file records the enabled LazyVim extras, while
+`nvim_config/lazy-lock.json` keeps the tested plugin revisions pinned.
+
+The configuration also includes the current LazyVim starter bootstrap and the
+official `.neoconf.json` defaults.
+
+## Testing
+
+The installer can be tested without touching the host Neovim installation by
+using a temporary HOME and XDG directories. The repository tests this way for
+configuration copying, timestamped backups, and headless startup. A real
+plugin bootstrap still needs network access to GitHub.
+
+For the official installation requirements, see the
+[LazyVim documentation](https://www.lazyvim.org/installation).
